@@ -20,10 +20,7 @@ let
 in
 {
   options.gtk.catppuccin =
-    ctp.mkCatppuccinOpt {
-      name = "gtk";
-      enableDefault = false;
-    }
+    ctp.mkCatppuccinOpt { name = "gtk"; }
     // {
       accent = ctp.mkAccentOpt "gtk";
 
@@ -108,17 +105,6 @@ in
   ];
 
   config = mkMerge [
-    (mkIf (enable || cfg.gnomeShellTheme) {
-      warnings = [
-        ''
-          `gtk.catppuccin.enable` and `gtk.catppuccin.gnomeShellTheme` are deprecated and will be removed in a future release.
-
-          The upstream port has been archived and support will no longer be provided.
-          Please see https://github.com/catppuccin/gtk/issues/262
-        ''
-      ];
-    })
-
     (mkIf enable {
       gtk.theme =
         let
@@ -183,3 +169,4 @@ in
     })
   ];
 }
+
