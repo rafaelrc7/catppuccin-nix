@@ -141,14 +141,11 @@ For [standalone installations](https://nix-community.github.io/home-manager/inde
 }
 ```
 
-3. Enable for supported programs with `catppucin.enable = true;`
+3. Enable for supported programs
 
 ```nix
 {
-  programs.starship = {
-    enable = true;
-    catppuccin.enable = true;
-  };
+  catppuccin.starship.enable = true;
 }
 ```
 
@@ -163,11 +160,12 @@ For [standalone installations](https://nix-community.github.io/home-manager/inde
 ## 🙋 FAQ
 
 - Q: **"How do I know what programs are supported?"**\
-  A: You can find programs supported through home-manager [here](https://nix.catppuccin.com/options/home-manager-options.html),
-  and NixOS modules [here](https://nix.catppuccin.com/options/nixos-options.html)
+  A: You can find programs supported through home-manager [here](https://nix.catppuccin.com/search/rolling/?scope=home-manager+modules),
+  and NixOS modules [here](https://nix.catppuccin.com/search/rolling/?scope=NixOS+modules)
 
 - Q: **"How do I set `catppuccin.enable` for everything I use?"**\
-  A: You can set `catppuccin.enable` [globally](https://nix.catppuccin.com/options/home-manager-options.html#catppuccinenable)
+  A: You can set `catppuccin.enable` globally through home-manager [here](https://nix.catppuccin.com/search/rolling/?option_scope=1&option=catppuccin.enable),
+  and NixOS modules [here](https://nix.catppuccin.com/search/rolling/?option_scope=0&option=catppuccin.enable)
 
 - Q: **"What versions of NixOS and home-manager are supported?"**\
   A: We primarily support the `unstable` branch, but try our best to support the current stable release.
@@ -181,15 +179,12 @@ For [standalone installations](https://nix-community.github.io/home-manager/inde
   
   ```nix
   {
-    programs = {
-      cava.catppuccin.enable = false;
-      gh-dash.catppuccin.enable = false;
-      imv.catppuccin.enable = false;
-      swaylock.catppuccin.enable = false;
-    };
-  
-    services = {
-      mako.catppuccin.enable = false;
+    catppuccin = {
+      cava.enable = false;
+      gh-dash.enable = false;
+      imv.enable = false;
+      swaylock.enable = false;
+      mako.enable = false;
     };
   }
   ```

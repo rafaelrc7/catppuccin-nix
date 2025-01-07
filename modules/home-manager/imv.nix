@@ -1,13 +1,27 @@
+{ catppuccinLib }:
 { config, lib, ... }:
+
 let
   inherit (config.catppuccin) sources;
-  cfg = config.programs.imv.catppuccin;
-  enable = cfg.enable && config.programs.imv.enable;
-in
-{
-  options.programs.imv.catppuccin = lib.ctp.mkCatppuccinOpt { name = "imv"; };
 
-  config.programs.imv.settings = lib.mkIf enable (
-    lib.ctp.fromINI (sources.imv + "/themes/${cfg.flavor}.config")
-  );
+  cfg = config.catppuccin.imv;
+in
+
+{
+  options.catppuccin.imv = catppuccinLib.mkCatppuccinOption { name = "imv"; };
+
+  imports = catppuccinLib.mkRenamedCatppuccinOptions {
+    from = [
+      "programs"
+      "imv"
+      "catppuccin"
+    ];
+    to = "imv";
+  };
+
+  config = lib.mkIf cfg.enable {
+    programs.imv = {
+      settings = catppuccinLib.importINI (sources.imv + "/${cfg.flavor}.config");
+    };
+  };
 }

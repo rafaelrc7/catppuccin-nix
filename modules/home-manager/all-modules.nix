@@ -5,7 +5,8 @@
   ./bottom.nix
   ./btop.nix
   ./cava.nix
-  ./cursor.nix
+  ./chrome.nix
+  ./cursors.nix
   ./delta.nix
   ./dunst.nix
   ./fcitx5.nix
@@ -17,7 +18,6 @@
   ./gh-dash.nix
   ./gitui.nix
   ./glamour.nix
-  ./globals.nix
   ./gtk.nix
   ./helix.nix
   ./hyprland.nix
@@ -32,6 +32,7 @@
   ./micro.nix
   ./mpv.nix
   ./neovim.nix
+  ./obs.nix
   ./polybar.nix
   ./rio.nix
   ./rofi.nix
@@ -42,10 +43,11 @@
   ./sway.nix
   ./tmux.nix
   ./tofi.nix
-  ./obs-studio.nix
   ./waybar.nix
+  ./wlogout.nix
   ./yazi.nix
   ./zathura.nix
+  ./zed-editor.nix
   ./zellij.nix
   ./zsh-syntax-highlighting.nix
 ]

@@ -1,18 +1,31 @@
+{ catppuccinLib }:
 { config, lib, ... }:
+
 let
   inherit (config.catppuccin) sources;
 
-  cfg = config.programs.rofi.catppuccin;
-  enable = cfg.enable && config.programs.rofi.enable;
+  cfg = config.catppuccin.rofi;
 in
-{
-  options.programs.rofi.catppuccin = lib.ctp.mkCatppuccinOpt { name = "rofi"; };
 
-  config.programs.rofi = lib.mkIf enable {
-    theme = {
-      "@theme" = builtins.path {
-        name = "catppuccin-${cfg.flavor}.rasi";
-        path = "${sources.rofi}/basic/.local/share/rofi/themes/catppuccin-${cfg.flavor}.rasi";
+{
+  options.catppuccin.rofi = catppuccinLib.mkCatppuccinOption { name = "rofi"; };
+
+  imports = catppuccinLib.mkRenamedCatppuccinOptions {
+    from = [
+      "programs"
+      "rofi"
+      "catppuccin"
+    ];
+    to = "rofi";
+  };
+
+  config = lib.mkIf cfg.enable {
+    programs.rofi = {
+      theme = {
+        "@theme" = builtins.path {
+          name = "catppuccin-${cfg.flavor}.rasi";
+          path = "${sources.rofi}/catppuccin-${cfg.flavor}.rasi";
+        };
       };
     };
   };

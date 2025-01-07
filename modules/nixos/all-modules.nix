@@ -1,7 +1,7 @@
 [
-  ./console.nix
-  ./globals.nix
+  ./fcitx5.nix
   ./grub.nix
   ./plymouth.nix
   ./sddm.nix
+  ./tty.nix
 ]

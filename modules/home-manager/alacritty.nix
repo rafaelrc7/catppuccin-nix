@@ -1,13 +1,26 @@
+{ catppuccinLib }:
 { config, lib, ... }:
+
 let
   inherit (config.catppuccin) sources;
-  cfg = config.programs.alacritty.catppuccin;
-  enable = cfg.enable && config.programs.alacritty.enable;
+  cfg = config.catppuccin.alacritty;
 in
-{
-  options.programs.alacritty.catppuccin = lib.ctp.mkCatppuccinOpt { name = "alacritty"; };
 
-  config = lib.mkIf enable {
-    programs.alacritty.settings = lib.importTOML "${sources.alacritty}/catppuccin-${cfg.flavor}.toml";
+{
+  options.catppuccin.alacritty = catppuccinLib.mkCatppuccinOption { name = "alacritty"; };
+
+  imports = catppuccinLib.mkRenamedCatppuccinOptions {
+    from = [
+      "programs"
+      "alacritty"
+      "catppuccin"
+    ];
+    to = "alacritty";
+  };
+
+  config = lib.mkIf cfg.enable {
+    programs.alacritty = {
+      settings.general.import = lib.mkBefore [ "${sources.alacritty}/catppuccin-${cfg.flavor}.toml" ];
+    };
   };
 }

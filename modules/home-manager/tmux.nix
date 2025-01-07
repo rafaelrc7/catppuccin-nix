@@ -1,32 +1,18 @@
+{ catppuccinLib }:
 {
   config,
   lib,
-  pkgs,
   ...
 }:
-let
-  inherit (lib)
-    ctp
-    mkOption
-    types
-    concatStrings
-    ;
-  inherit (config.catppuccin) sources;
-  cfg = config.programs.tmux.catppuccin;
-  enable = cfg.enable && config.programs.tmux.enable;
 
-  plugin =
-    # TODO @getchoo: upstream this in nixpkgs
-    pkgs.tmuxPlugins.mkTmuxPlugin {
-      pluginName = "catppuccin";
-      version = builtins.substring 0 7 sources.tmux.revision;
-      src = sources.tmux;
-    };
+let
+  cfg = config.catppuccin.tmux;
 in
+
 {
-  options.programs.tmux.catppuccin = ctp.mkCatppuccinOpt { name = "tmux"; } // {
-    extraConfig = mkOption {
-      type = types.lines;
+  options.catppuccin.tmux = catppuccinLib.mkCatppuccinOption { name = "tmux"; } // {
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       description = "Additional configuration for the catppuccin plugin.";
       default = "";
       example = ''
@@ -35,15 +21,44 @@ in
     };
   };
 
-  config.programs.tmux.plugins = lib.mkIf enable [
-    {
-      inherit plugin;
-      extraConfig = concatStrings [
-        ''
-          set -g @catppuccin_flavor '${cfg.flavor}'
-        ''
-        cfg.extraConfig
+  imports =
+    (catppuccinLib.mkRenamedCatppuccinOptions {
+      from = [
+        "programs"
+        "tmux"
+        "catppuccin"
       ];
-    }
-  ];
+      to = "tmux";
+    })
+    ++ [
+      (lib.mkRenamedOptionModule
+        [
+          "programs"
+          "tmux"
+          "catppuccin"
+          "extraConfig"
+        ]
+        [
+          "catppuccin"
+          "tmux"
+          "extraConfig"
+        ]
+      )
+    ];
+
+  config = lib.mkIf cfg.enable {
+    programs.tmux = {
+      plugins = [
+        {
+          plugin = config.catppuccin.sources.tmux;
+          extraConfig = lib.concatStrings [
+            ''
+              set -g @catppuccin_flavor '${cfg.flavor}'
+            ''
+            cfg.extraConfig
+          ];
+        }
+      ];
+    };
+  };
 }

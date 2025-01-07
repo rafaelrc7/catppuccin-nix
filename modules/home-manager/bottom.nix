@@ -1,15 +1,26 @@
+{ catppuccinLib }:
 { config, lib, ... }:
+
 let
   inherit (config.catppuccin) sources;
-  cfg = config.programs.bottom.catppuccin;
-  enable = cfg.enable && config.programs.bottom.enable;
+  cfg = config.catppuccin.bottom;
 in
-{
-  options.programs.bottom.catppuccin = lib.ctp.mkCatppuccinOpt { name = "bottom"; };
 
-  config = lib.mkIf enable {
+{
+  options.catppuccin.bottom = catppuccinLib.mkCatppuccinOption { name = "bottom"; };
+
+  imports = catppuccinLib.mkRenamedCatppuccinOptions {
+    from = [
+      "programs"
+      "bottom"
+      "catppuccin"
+    ];
+    to = "bottom";
+  };
+
+  config = lib.mkIf cfg.enable {
     programs.bottom = {
-      settings = lib.importTOML "${sources.bottom}/themes/${cfg.flavor}.toml";
+      settings = lib.importTOML "${sources.bottom}/${cfg.flavor}.toml";
     };
   };
 }
